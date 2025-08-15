@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Inicio de Ciclo en UCSUR</title>
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/icons.css">
+<link rel="stylesheet" href="css/responsee.css">
+<link rel="stylesheet" href="compiled/flipclock.css">
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="compiled/flipclock.js"></script>	
+<style>
+#page {
+    width: 490px;
+    margin: 0 auto;
+}
+#header {
+    min-height: 100px;
+	border:1px solid #CCCCCC;
+	margin-bottom:10px;
+	text-align:center;
+}
+#content {
+    width: 100%;
+    float: left;
+    text-align:center;
+}
+
+.banner { position: relative; overflow: auto; }
+.banner li { list-style: none; }
+.banner ul li { float: left; }
+
+#footer {
+    border: 1px solid #CCCCCC;
+    float: left;
+    height: 50px;
+    margin-top: 10px;
+    padding: 10px;
+    width: 470px;
+}
+@media screen and (max-width: 980px) {
+
+    #page { width: 100%; }
+    #content { width: 100%; }
+}
+
+@media screen and (max-width: 700px) {
+
+    #content, #footer {
+        width: auto;
+        float: none;
+	height:auto;
+    }
+	
+    #header h1 {
+            font-size:small;
+    }
+}
+</style>
+<script type="text/javascript">
+			var clock;
+
+			$(document).ready(function() {
+
+				// Grab the current date
+				var currentDate = new Date();
+				// Set some date in the future. ***change to desired date***
+				//var futureDate = new Date(2014, 11, 23, 6, 0, 0);
+				//11/23/2014 at 6pm
+				//Es con un mes de anticipacion, si quiero 3 de enero 2019, debe ser 2018 12 3
+				var futureDate = new Date(2025, 7, 25, 00, 0, 0); //fixed as per comments
+
+
+				// Calculate the difference in seconds between the future and current date
+				var diff = futureDate.getTime() / 1000 - currentDate.getTime() / 1000;
+
+				// Instantiate a coutdown FlipClock
+				clock = $('.clock').FlipClock(diff, {
+					clockFace: 'DailyCounter',
+					language:'es-es',
+					countdown: true
+				});
+			});
+</script>
+</head>
+<body>
+<p align="center" class="Estilo2" style="color: #000000; font-size: 24px;"><strong><br/>
+<strong>TIEMPO QUE FALTA PARA EL INICIO DEL CICLO! QUE EMPIECE EL JUEGO!</strong>
+</p>
+<br>
+<img src="payaso.jpg" width="656" height="426" alt="" class="center">
+<div id="root">
+    <div id="content">
+   	<div class="clock" style="margin:2em;"></div>
+    </div>
+</body>
+<footer>
+ <div class="s-12 l-6">
+<p>&copy; Copyright 2023-2025 - <a href="https://www.facebook.com/andresarturoleesanchez" target="_blank">Andres Sanchez</a><!--- from <a href="https://www.linkedin.com/in/andressanchezq/" target="_blank">Facultad de Quimica e Ing. Quimica UNMSM</a>-->. Todos los Derechos son Reservados</p>
+</div>
+<div class="s-12 l-6">
+<a class="right" target="_blank" href="https://www.facebook.com/andresarturoleesanchez" title="Perfil de Andres Sanchez">Dise&ntilde;ado por Andres Sanchez</a>
+</div> 
+</footer>
+</html>

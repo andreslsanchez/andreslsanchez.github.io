@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calcular promedio de Notas</title>
+    <meta name="description" content="Calculadora para sacar promedio de notas con porcentajes">
+
+    <link rel="stylesheet" href="css/app.css">
+	<!-- Favicon del sitio -->
+    <link rel="icon" type="image/png" href="img/logo2025.png" sizes="64x64" alt=ASC">
+    
+
+    <meta property="og:title" content="Calcular promedio de Notas" />
+    <meta property="og:description" content="Calcular promedio de Notas" />
+    <meta property="og:url" content="https://andreslsanchez.rf.gd" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://andreslsanchez.rf.gd" />
+    <meta property="og:site_name" content="https://andreslsanchez.rf.gd" />
+    <meta property="og:locale" content="es" />
+
+    
+    
+    <style>
+        [x-cloak] { display: none; }
+    </style>
+
+</head>
+<body>
+
+  
+    
+    <div class="pt-12 min-h-screen w-full">
+    <div class="container mx-auto min-h-screen py-8">
+	<div class="w-full min-h-screen">
+	<div class="w-full min-h-[60px] px-4 md:px-0 mb-8">
+    <h1 class="mb-2">Promedio del Curso y Examen Final</h1>
+	<p>Ingresa las notas del curso y su respectivo porcentaje (peso) para sacar el promedio y la calificación que necesitas en el examen final. Utiliza punto como separador decimal. <strong>Deja en blanco las casillas que no utilices</strong>.</p>
+    </div>
+
+	<section id="calculadora" class="w-full px-4 py-8 md:px-8 md:py-8 bg-white md:rounded-t shadow-lg overflow-hidden border-y md:border-x text-sm min-h-[240px]">
+	<div class="grid md:grid-cols-2 gap-8" x-data="calcPromedioNotasData()" x-cloak>
+	<div class="flex flex-col gap-3">
+            <template x-for="(nota, index) in notas" :key="index">
+                <div class="flex items-center justify-between">
+                    <label x-bind:for="'nota' + index"
+                        x-text="'Nota ' + (index + 1)"></label>
+                    <div class="flex items-center justify-end gap-2">
+                        <div>
+                            <input x-bind:aria-label="'Nota ' + index"
+                                class="w-20 text-right" x-model="nota.valor" type="text" x-bind:name="'nota' + index"
+                                x-bind:id="'nota' + index" x-bind:placeholder="index < 1 ? '18' : ''">
+                        </div>
+                        <div class="flex items-center">
+                            <input
+                                x-bind:aria-label="'Ponderación Nota ' +
+                                index"
+                                class="w-14 text-right !rounded-r-none" x-model="nota.ponderacion" type="text"
+                                x-bind:name="'ponderacion' + index" x-bind:placeholder="index < 1 ? '18' : ''">
+
+                                                            <span class="input-addon">%</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div x-show="errorNotas" class="error text-red-500 text-right">
+                Al menos una nota o ponderación es inválida.
+            </div>
+                            <div x-show="errorSumaPonderaciones" class="error text-amber-500 text-right">
+                    ¡Ojo! La suma de los porcentajes es diferente a 100%
+                </div>
+            
+            <div class="flex justify-end items-center">
+                <button @click="agregarFila" class="btn-secundario flex items-center gap-1">
+                    <svg class="fill-current h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z" />
+                    </svg>
+                    <span>Agregar nota</span>
+                </button>
+            </div>
+
+                            <p class="pt-2">Opcionalmente, ingresa la nota necesaria y el porcentaje del examen final, para saber la calificación que necesitas para aprobar el curso.</p>
+
+                <div class="flex items-center justify-between">
+                    <label for="notaAprobacion">Promedio para aprobar el curso</label>
+                    <div>
+                        <input aria-label="Nota Aprobación Examen" class="w-20 text-right" x-model="notaAprobacion"
+                            id="notaAprobacion" type="text" name="notaAprobacion" placeholder="12.5">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label for="ponderacionExamen">Porcentaje de Examen Final</label>
+                    <div class="flex items-center">
+                        <input aria-label="Ponderación Examen" class="w-14 text-right !rounded-r-none"
+                            x-model="ponderacionExamen" type="text" name="ponderacionExamen" id="ponderacionExamen"
+                            placeholder="25">
+                        <span class="input-addon">%</span>
+                    </div>
+                </div>
+                <div x-show="errorPonderacionExamen" class="error text-red-500 text-right">
+                    Ponderación Examen es inválida.
+                </div>
+                <div x-show="errorNotaAprobacion" class="error text-red-500 text-right">
+                    Nota Aprobación Examen es inválida.
+                </div>
+            
+            <div class="w-full flex justify-end">
+                <button @click="calcular" class="btn-calcular">Calcular</button>
+            </div>
+
+        </div>
+
+
+        <div class="contenedor-resultados flex flex-col gap-2">
+            <p class="text-lg">Promedio del curso = <strong x-text="resultado"></strong></p>
+                            <p>Necesitarás un <strong x-text="notaExamen"></strong>
+                    en el examen final para aprobar el curso.
+                </p>
+                <p x-show="success" class="font-bold">¡Felicitaciones! Ya has aprobado el curso.</p>
+                    </div>
+
+    </div>
+    
+        </section>
+           
+
+        
+  
+
+    <script src="js/appn.js" defer></script>
+        <script>
+        function calcPromedioNotasData() {
+            return {
+                notas: [{
+                        valor: '',
+                        ponderacion: ''
+                    },
+                    {
+                        valor: '',
+                        ponderacion: ''
+                    },
+                    {
+                        valor: '',
+                        ponderacion: ''
+                    },
+                ],
+                notaAprobacion: '',
+                ponderacionExamen: '',
+                errorNotas: false,
+                errorNotaAprobacion: false,
+                errorPonderacionExamen: false,
+                errorSumaPonderaciones: false,
+                success: false,
+                resultado: '?',
+                notaExamen: '?',
+                agregarFila() {
+                    this.notas.push({
+                        valor: '',
+                        ponderacion: ''
+                    });
+                },
+                calcular() {
+                    this.errorNotas = false;
+                    this.errorNotaAprobacion = false;
+                    this.errorPonderacionExamen = false;
+                    this.errorSumaPonderaciones = false;
+                    this.errorSumaPonderaciones = false;
+                    this.resultado = '?';
+                    this.success = false;
+
+                    let sumaNotas = 0;
+                    let sumaPonderaciones = 0;
+
+                    for (let i = 0; i < this.notas.length; i++) {
+
+                        if (this.notas[i].valor !== '' || this.notas[i].ponderacion !== '') {
+                            const valor = parseFloat(this.notas[i].valor);
+                            const ponderacion = parseFloat(this.notas[i].ponderacion);
+
+                            if (isNaN(valor) || isNaN(ponderacion)) {
+                                this.errorNotas = true;
+                                return;
+                            }
+
+                            sumaNotas += (valor * ponderacion);
+                            sumaPonderaciones += ponderacion;
+                        } else {
+                            if (i === 0) {
+                                this.errorNotas = true;
+                                return;
+                            }
+                        }
+                    }
+
+                    if (sumaPonderaciones !== 100) {
+                        this.errorSumaPonderaciones = true;
+                    }
+
+                    this.resultado = (sumaNotas / sumaPonderaciones).toFixed(2);
+
+                    if (this.notaAprobacion !== '' && this.ponderacionExamen !== '') {
+                        const notaAprobacion = parseFloat(this.notaAprobacion);
+                        const ponderacionExamen = parseFloat(this.ponderacionExamen);
+
+                        if (isNaN(notaAprobacion) || isNaN(ponderacionExamen)) {
+                            this.errorNotaAprobacion = true;
+                            return;
+                        }
+
+                        const notaExamen = ((notaAprobacion - this.resultado * (100 - ponderacionExamen) / 100) / (
+                            ponderacionExamen / 100)).toFixed(2);
+                        if (notaExamen < 0) {
+                            this.notaExamen = 0;
+                            this.success = true;
+                        } else {
+                            this.notaExamen = notaExamen;
+                        }
+
+                    }
+                },
+            };
+        }
+    </script>
+<div class="box footer">
+                  <footer class="line">
+                     <div class="s-12 l-6">
+                        <br>
+                       <p>Inicio de Ciclo:&nbsp;Ver tiempo restante <a href="ex/ic.html" target="_blank">AQUI</a></p>
+                       <p>Fin de Ciclo: Ver tiempo restante <a href="ex/fc.html" target="_blank">AQUI</a></p>
+
+                       <p>&nbsp;</p>
+<p>© Copyright 2023 - 2025 - <a href="https://wa.me/51904217277" title="Whatsapp de Andres Sanchez" target="_blank">Andres Sanchez</a>. Todos los Derechos son Reservados</p>
+                     </div>
+                     <div class="s-12 l-6">
+                        <a class="right" target="_blank" href="https://www.facebook.com/andresarturoleesanchez" title="Perfil de Andres Sanchez">Adaptado por Andres Sanchez</a>
+                     </div>
+                  </footer>
+</body>
+</html>
